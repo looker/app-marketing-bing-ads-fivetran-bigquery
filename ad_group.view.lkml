@@ -40,181 +40,180 @@ explore: ad_group_adapter {
 }
 
 view: ad_group_adapter {
-#    extends: [bingads_config, bingads_base]
-  extends: [bingads_base]
-   sql_table_name: {{ ad_group.bingads_schema._sql }}.ad_group_stats ;;
+  extends: [bingads_config, bingads_base]
+  sql_table_name: {{ ad_group.bingads_schema._sql }}.ad_group_stats ;;
 
-dimension: _fivetran_id {
-  type: number
-  sql: ${TABLE}._fivetran_id ;;
-}
+  dimension: _fivetran_id {
+    type: number
+    sql: ${TABLE}._fivetran_id ;;
+  }
 
-dimension_group: _fivetran_synced {
-  type: time
-  timeframes: [
-    raw,
-    time,
-    date,
-    week,
-    month,
-    quarter,
-    year
-  ]
-  sql: ${TABLE}._fivetran_synced ;;
-}
+  dimension_group: _fivetran_synced {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}._fivetran_synced ;;
+  }
 
-dimension: account_id {
-  type: number
-  sql: ${TABLE}.account_id ;;
-}
+  dimension: account_id {
+    type: number
+    sql: ${TABLE}.account_id ;;
+  }
 
-dimension: account_name {
-  type: string
-  sql: ${TABLE}.account_name ;;
-}
+  dimension: account_name {
+    type: string
+    sql: ${TABLE}.account_name ;;
+  }
 
-dimension: account_status {
-  type: string
-  sql: ${TABLE}.account_status ;;
-}
+  dimension: account_status {
+    type: string
+    sql: ${TABLE}.account_status ;;
+  }
 
-dimension: ad_distribution {
-  type: string
-  sql: ${TABLE}.ad_distribution ;;
-}
+  dimension: ad_distribution {
+    type: string
+    sql: ${TABLE}.ad_distribution ;;
+  }
 
-dimension: ad_group_id {
-  type: number
-  sql: ${TABLE}.ad_group_id ;;
-}
+  dimension: ad_group_id {
+    type: number
+    sql: ${TABLE}.ad_group_id ;;
+  }
 
-dimension: ad_group_name {
-  type: string
-  sql: ${TABLE}.ad_group_name ;;
-}
+  dimension: ad_group_name {
+    type: string
+    sql: ${TABLE}.ad_group_name ;;
+  }
 
-dimension: ad_relevance {
-  type: number
-  sql: ${TABLE}.ad_relevance ;;
-}
+  dimension: ad_relevance {
+    type: number
+    sql: ${TABLE}.ad_relevance ;;
+  }
 
-dimension: assists {
-  type: number
-  sql: ${TABLE}.assists ;;
-}
+  dimension: assists {
+    type: number
+    sql: ${TABLE}.assists ;;
+  }
 
-dimension: average_position {
-  type: number
-  sql: ${TABLE}.average_position ;;
-}
+  dimension: average_position {
+    type: number
+    sql: ${TABLE}.average_position ;;
+  }
 
-dimension: bid_match_type {
-  type: string
-  sql: ${TABLE}.bid_match_type ;;
-}
+  dimension: bid_match_type {
+    type: string
+    sql: ${TABLE}.bid_match_type ;;
+  }
 
-dimension: campaign_id {
-  type: number
-  sql: ${TABLE}.campaign_id ;;
-}
+  dimension: campaign_id {
+    type: number
+    sql: ${TABLE}.campaign_id ;;
+  }
 
-dimension: campaign_name {
-  type: string
-  sql: ${TABLE}.campaign_name ;;
-}
+  dimension: campaign_name {
+    type: string
+    sql: ${TABLE}.campaign_name ;;
+  }
 
-dimension: campaign_status {
-  type: string
-  sql: ${TABLE}.campaign_status ;;
-}
+  dimension: campaign_status {
+    type: string
+    sql: ${TABLE}.campaign_status ;;
+  }
 
-dimension: click_calls {
-  type: number
-  sql: ${TABLE}.click_calls ;;
-}
+  dimension: click_calls {
+    type: number
+    sql: ${TABLE}.click_calls ;;
+  }
 
-dimension: clicks {
-  type: number
-  sql: ${TABLE}.clicks ;;
-}
+  dimension: clicks {
+    type: number
+    sql: ${TABLE}.clicks ;;
+  }
 
-dimension: conversions {
-  type: number
-  sql: ${TABLE}.conversions ;;
-}
+  dimension: conversions {
+    type: number
+    sql: ${TABLE}.conversions ;;
+  }
 
-dimension: delivered_match_type {
-  type: string
-  sql: ${TABLE}.delivered_match_type ;;
-}
+  dimension: delivered_match_type {
+    type: string
+    sql: ${TABLE}.delivered_match_type ;;
+  }
 
-dimension: device_os {
-  type: string
-  sql: ${TABLE}.device_os ;;
-}
+  dimension: device_os {
+    type: string
+    sql: ${TABLE}.device_os ;;
+  }
 
-dimension: device_type {
-  type: string
-  sql: ${TABLE}.device_type ;;
-}
+  dimension: device_type {
+    type: string
+    sql: ${TABLE}.device_type ;;
+  }
 
-dimension_group: gregorian {
-  type: time
-  timeframes: [
-    raw,
-    time,
-    date,
-    week,
-    month,
-    quarter,
-    year
-  ]
-  sql: ${TABLE}.gregorian_date ;;
-}
+  dimension_group: gregorian {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.gregorian_date ;;
+  }
 
-dimension: impressions {
-  type: number
-  sql: ${TABLE}.impressions ;;
-}
+  dimension: impressions {
+    type: number
+    sql: ${TABLE}.impressions ;;
+  }
 
-dimension: landing_page_experience {
-  type: number
-  sql: ${TABLE}.landing_page_experience ;;
-}
+  dimension: landing_page_experience {
+    type: number
+    sql: ${TABLE}.landing_page_experience ;;
+  }
 
-dimension: manual_calls {
-  type: number
-  sql: ${TABLE}.manual_calls ;;
-}
+  dimension: manual_calls {
+    type: number
+    sql: ${TABLE}.manual_calls ;;
+  }
 
-dimension: network {
-  type: string
-  sql: ${TABLE}.network ;;
-}
+  dimension: network {
+    type: string
+    sql: ${TABLE}.network ;;
+  }
 
-dimension: phone_calls {
-  type: number
-  sql: ${TABLE}.phone_calls ;;
-}
+  dimension: phone_calls {
+    type: number
+    sql: ${TABLE}.phone_calls ;;
+  }
 
-dimension: phone_impressions {
-  type: number
-  sql: ${TABLE}.phone_impressions ;;
-}
+  dimension: phone_impressions {
+    type: number
+    sql: ${TABLE}.phone_impressions ;;
+  }
 
-dimension: revenue {
-  type: number
-  sql: ${TABLE}.revenue ;;
-}
+  dimension: revenue {
+    type: number
+    sql: ${TABLE}.revenue ;;
+  }
 
-dimension: spend {
-  type: number
-  sql: ${TABLE}.spend ;;
-}
+  dimension: spend {
+    type: number
+    sql: ${TABLE}.spend ;;
+  }
 
-dimension: top_vs_other {
-  type: string
-  sql: ${TABLE}.top_vs_other ;;
-}
+  dimension: top_vs_other {
+    type: string
+    sql: ${TABLE}.top_vs_other ;;
+  }
 
 }

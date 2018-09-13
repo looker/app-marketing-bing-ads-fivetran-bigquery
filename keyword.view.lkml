@@ -280,5 +280,4 @@ view: keyword_adapter {
     type: string
     sql: ${TABLE}.top_vs_other ;;
   }
-
 }
