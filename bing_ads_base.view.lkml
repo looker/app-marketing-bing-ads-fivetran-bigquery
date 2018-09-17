@@ -1,4 +1,4 @@
-view: bingads_base {
+view: bing_ads_base {
   extension: required
 
   dimension: _date {

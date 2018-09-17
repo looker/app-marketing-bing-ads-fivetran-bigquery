@@ -1,48 +1,22 @@
-include: "ad_metrics_base.view"
-include: "ad_group.view"
-include: "account.view"
-include: "keyword.view"
-include: "campaign.view"
-include: "ad.view"
+# Views and Explores for Bing Ads rolled up stats tables
 
-
-explore: ad_impressions_adapter {
-  extends: [account_join]
-  from: ad_impressions_adapter
+explore: bing_ad_impressions_adapter {
+  from: bing_ad_impressions_adapter
   view_name: fact
   hidden: yes
-  group_label: "BingAds"
-  label: "BingAds Impressions"
+  group_label: "Bing Ads"
+  label: "Bing Ads Impressions"
   view_label: "Impressions"
 }
 
-view: ad_impressions_derived_table {
-  extension: required
-  derived_table: {
-    datagroup_trigger: bingads_etl_datagroup
-    explore_source: ad_impressions_adapter {
-      column: date { field: fact._date }
-      column: account_id { field: fact.account_id }
-      column: network { field: fact.network }
-      column: device_os { field: fact.device_os }
-      column: device_type { field: fact.device_type }
-      column: average_position {field: fact.weighted_average_position}
-      column: clicks {field: fact.total_clicks }
-      column: conversions {field: fact.total_conversions}
-      column: conversion_value {field: fact.total_conversionvalue}
-      column: cost {field: fact.total_cost}
-      column: impressions { field: fact.total_impressions}
-    }
-  }
+view: bing_ad_impressions_adapter {
+  extends: [bing_ad_impressions_adapter_base]
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.account_stats ;;
 }
 
-view: ad_impressions_adapter {
-  extends: [ad_impressions_derived_table, ad_impressions_adapter_base]
-}
-
-view: ad_impressions_adapter_base {
+view: bing_ad_impressions_adapter_base {
   extension: required
-  extends: [bingads_config, bingads_base, ad_metrics_base_adapter]
+  extends: [bing_ads_config, bing_ads_base]
 
   dimension: account_primary_key {
     hidden: yes
@@ -67,133 +41,96 @@ view: ad_impressions_adapter_base {
   }
 
   dimension: account_id {
+    hidden: yes
     type: number
-    sql: ${TABLE}.account_id ;;
   }
 
   dimension: account_name {
     type: string
-    sql: ${TABLE}.account_name ;;
   }
 
   dimension: account_status {
     type: string
-    sql: ${TABLE}.account_status ;;
   }
 
   dimension: ad_description {
     type: string
-    sql: ${TABLE}.ad_description ;;
   }
 
   dimension: ad_distribution {
     type: string
-    sql: ${TABLE}.ad_distribution ;;
   }
 
   dimension: ad_group_id {
+    hidden: yes
     type: number
-    sql: ${TABLE}.ad_group_id ;;
   }
 
   dimension: ad_group_name {
     type: string
-    sql: ${TABLE}.ad_group_name ;;
   }
 
   dimension: ad_group_status {
     type: string
-    sql: ${TABLE}.ad_group_status ;;
   }
 
   dimension: ad_id {
+    hidden: yes
     type: number
-    sql: ${TABLE}.ad_id ;;
   }
 
   dimension: ad_status {
+    hidden: yes
     type: string
-    sql: ${TABLE}.ad_status ;;
   }
 
   dimension: ad_title {
     type: string
-    sql: ${TABLE}.ad_title ;;
   }
 
   dimension: ad_type {
     type: string
-    sql: ${TABLE}.ad_type ;;
-  }
-
-  dimension: assists {
-    type: number
-    sql: ${TABLE}.assists ;;
-  }
-
-  dimension: average_position {
-    type: number
-    sql: ${TABLE}.average_position ;;
   }
 
   dimension: bid_match_type {
     type: string
-    sql: ${TABLE}.bid_match_type ;;
   }
 
   dimension: campaign_id {
+    hidden: yes
     type: number
-    sql: ${TABLE}.campaign_id ;;
   }
 
   dimension: campaign_name {
     type: string
-    sql: ${TABLE}.campaign_name ;;
   }
 
   dimension: campaign_status {
     type: string
-    sql: ${TABLE}.campaign_status ;;
-  }
-
-  dimension: clicks {
-    type: number
-    sql: ${TABLE}.clicks ;;
-  }
-
-  dimension: conversions {
-    type: number
-    sql: ${TABLE}.conversions ;;
   }
 
   dimension: delivered_match_type {
     type: string
-    sql: ${TABLE}.delivered_match_type ;;
   }
 
   dimension: destination_url {
     type: string
-    sql: ${TABLE}.destination_url ;;
   }
 
   dimension: device_os {
     type: string
-    sql: ${TABLE}.device_os ;;
   }
 
   dimension: device_type {
     type: string
-    sql: ${TABLE}.device_type ;;
   }
 
   dimension: display_url {
     type: string
-    sql: ${TABLE}.display_url ;;
   }
 
   dimension: final_url {
     type: string
-    sql: ${TABLE}.final_url ;;
   }
 
   dimension_group: gregorian {
@@ -210,96 +147,54 @@ view: ad_impressions_adapter_base {
     sql: ${TABLE}.gregorian_date ;;
   }
 
-  dimension: impressions {
-    type: number
-    sql: ${TABLE}.impressions ;;
-  }
-
   dimension: language {
     type: string
-    sql: ${TABLE}.language ;;
   }
 
   dimension: network {
     type: string
-    sql: ${TABLE}.network ;;
   }
 
   dimension: path_1 {
     type: string
-    sql: ${TABLE}.path_1 ;;
   }
 
   dimension: path_2 {
     type: string
-    sql: ${TABLE}.path_2 ;;
-  }
-
-  dimension: conversionvalue {
-    type: number
-    sql: ${TABLE}.revenue ;;
-  }
-
-  dimension: cost {
-    type: number
-    sql: ${TABLE}.spend ;;
   }
 
   dimension: title_part_1 {
     type: string
-    sql: ${TABLE}.title_part_1 ;;
   }
 
   dimension: title_part_2 {
     type: string
-    sql: ${TABLE}.title_part_2 ;;
   }
 
   dimension: top_vs_other {
     type: string
-    sql: ${TABLE}.top_vs_other ;;
   }
 
 }
 
 
 
-explore: ad_impressions_campaign_adapter {
-  extends: [ad_impressions_adapter, campaign_join]
-  from: ad_impressions_campaign_adapter
+explore: bing_ad_impressions_campaign_adapter {
+  extends: [bing_ad_impressions_adapter]
+  from: bing_ad_impressions_campaign_adapter
   view_name: fact
-  group_label: "BingAds"
-  label: "BingAds Impressions by Campaign"
+  group_label: "Bing Ads"
+  label: "Bing Ads Impressions by Campaign"
   view_label: "Impressions by Campaign"
 }
 
-view: ad_impressions_campaign_derived_table {
-  extension: required
-  derived_table: {
-    datagroup_trigger: bingads_etl_datagroup
-    explore_source: ad_impressions_campaign_adapter {
-      column: date { field: fact._date }
-      column: account_id { field: fact.account_id }
-      column: campaign_id { field: fact.campaign_id }
-      column: network { field: fact.network }
-      column: device_os { field: fact.device_os }
-      column: device_type { field: fact.device_type }
-      column: average_position {field: fact.weighted_average_position}
-      column: clicks {field: fact.total_clicks }
-      column: conversions {field: fact.total_conversions}
-      column: conversion_value {field: fact.total_conversionvalue}
-      column: cost {field: fact.total_cost}
-      column: impressions { field: fact.total_impressions}
-    }
-  }
+view: bing_ad_impressions_campaign_adapter {
+  extends: [bing_ad_impressions_campaign_adapter_base]
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.campaign_stats ;;
 }
 
-view: ad_impressions_campaign_adapter {
-  extends: [ad_impressions_campaign_derived_table, ad_impressions_campaign_adapter_base]
-}
-
-view: ad_impressions_campaign_adapter_base {
-  extends: [ad_impressions_adapter_base]
+view: bing_ad_impressions_campaign_adapter_base {
+  extends: [bing_ad_impressions_adapter_base]
 
   dimension: campaign_primary_key {
     hidden: yes
@@ -325,44 +220,19 @@ view: ad_impressions_campaign_adapter_base {
 
 
 
-explore: ad_impressions_ad_group_adapter {
-  extends: [ad_impressions_campaign_adapter, ad_group_join]
-  from: ad_impressions_ad_group_adapter
+explore: bing_ad_impressions_ad_group_adapter {
+  extends: [bing_ad_impressions_campaign_adapter]
+  from: bing_ad_impressions_ad_group_adapter
   view_name: fact
-  group_label: "BingAds"
-  label: "BingAds Impressions by Ad Group"
+  group_label: "Bing Ads"
+  label: "Bing Ads Impressions by Ad Group"
   view_label: "Impressions by Ad Group"
 }
 
-view: ad_impressions_ad_group_derived_table {
-  extension: required
-  derived_table: {
-    datagroup_trigger: bingads_etl_datagroup
-    explore_source: ad_impressions_ad_group_adapter{
-      column: date { field: fact._date }
-      column: account_id { field: fact.account_id }
-      column: campaign_id { field: fact.campaign_id }
-      column: ad_group_id { field: fact.ad_group_id }
-      column: network { field: fact.network }
-      column: device_os { field: fact.device_os }
-      column: device_type { field: fact.device_type }
-      column: average_position {field: fact.weighted_average_position}
-      column: clicks {field: fact.total_clicks }
-      column: conversions {field: fact.total_conversions}
-      column: conversion_value {field: fact.total_conversionvalue}
-      column: cost {field: fact.total_cost}
-      column: impressions { field: fact.total_impressions}
-    }
-  }
-}
-
-view: ad_impressions_ad_group_adapter {
-  extends: [ad_impressions_ad_group_derived_table, ad_impressions_ad_group_adapter_base]
-}
-
-view: ad_impressions_ad_group_adapter_base {
-  extension: required
-  extends: [ad_impressions_campaign_adapter_base]
+view: bing_ad_impressions_ad_group_adapter {
+#   extension: required
+  extends: [bing_ad_impressions_campaign_adapter_base]
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_group_stats ;;
 
   dimension: ad_group_primary_key {
     hidden: yes
@@ -390,18 +260,18 @@ view: ad_impressions_ad_group_adapter_base {
 
 
 
-explore: ad_impressions_keyword_adapter {
-  extends: [ad_impressions_ad_group_adapter, keyword_join]
-  from: ad_impressions_keyword_adapter
+explore: bing_ad_impressions_keyword_adapter {
+  extends: [bing_ad_impressions_ad_group_adapter]
+  from: bing_ad_impressions_keyword_adapter
   view_name: fact
-  group_label: "BingAds"
-  label: "BingAds Impressions by Keyword"
+  group_label: "Bing Ads"
+  label: "Bing Ads Impressions by Keyword"
   view_label: "Impressions by Keyword"
 }
 
-view: ad_impressions_keyword_adapter {
-  extends: [ad_impressions_ad_group_adapter_base]
-  sql_table_name: {{ fact.bingads_schema._sql }}.keyword_stats ;;
+view: bing_ad_impressions_keyword_adapter {
+  extends: [bing_ad_impressions_ad_group_adapter]
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.keyword_stats ;;
 
   dimension: keyword_primary_key {
     hidden: yes
@@ -423,23 +293,21 @@ view: ad_impressions_keyword_adapter {
     hidden: yes
     sql: CAST(${TABLE}.keyword_id as STRING) ;;
   }
-
-
 }
 
-explore: ad_impressions_ad_adapter {
-  extends: [ad_impressions_keyword_adapter, ad_join]
-  from: ad_impressions_ad_adapter
+explore: bing_ad_impressions_ad_adapter {
+  extends: [bing_ad_impressions_keyword_adapter]
+  from: bing_ad_impressions_ad_adapter
   view_name: fact
   group_label: "Bing Ads"
-  label: "BingAds Impressions by Ad"
+  label: "Bing Ads Impressions by Ad"
   view_label: "Impressions by Ad"
 
 }
 
-view: ad_impressions_ad_adapter {
-  extends: [ad_impressions_keyword_adapter]
-  sql_table_name: {{ fact.bingads_schema._sql }}.ad_stats ;;
+view: bing_ad_impressions_ad_adapter {
+  extends: [bing_ad_impressions_keyword_adapter]
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_stats ;;
 
   dimension: ad_primary_key {
     hidden: yes
