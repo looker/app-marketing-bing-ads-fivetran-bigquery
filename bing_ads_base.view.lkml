@@ -1,6 +1,19 @@
 view: bing_ads_base {
   extension: required
 
+  dimension: _fivetran_id {
+    hidden: yes
+    type: number
+    sql: ${TABLE}._fivetran_id ;;
+  }
+
+  dimension: _fivetran_synced {
+    hidden: yes
+    type: date_time
+    sql: ${TABLE}._fivetran_synced ;;
+    convert_tz: no
+  }
+
   dimension: _date {
     hidden: yes
     type: date_raw
