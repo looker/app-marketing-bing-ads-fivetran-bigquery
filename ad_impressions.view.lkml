@@ -101,15 +101,13 @@ view: bing_ad_impressions_adapter_base {
     sql: concat(
       ${date_string}, "|",
       ${account_id_string}, "|",
-      cast(${ad_id} as string), "|",
       ${ad_distribution}, "|",
-      ${device_type}, "|",
+      ${device_type_raw}, "|",
       ${device_os}, "|",
       ${delivered_match_type}, "|",
       ${bid_match_type}, "|",
-      ${language}, "|",
       ${top_vs_other}, "|",
-      ${network}) ;;
+      ${network_raw}) ;;
   }
 
   dimension: primary_key {
