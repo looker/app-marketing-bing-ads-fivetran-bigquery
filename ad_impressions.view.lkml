@@ -156,12 +156,54 @@ view: bing_ad_impressions_adapter_base {
     type: string
   }
 
-  dimension: device_type {
+  dimension: device_type_raw {
     type: string
+    sql: ${TABLE}.device_type ;;
+  }
+
+  dimension: device_type {
+    hidden: yes
+    type: string
+    case: {
+      when: {
+        sql: ${device_type_raw} = 'Computer' ;;
+        label: "Desktop"
+      }
+      when: {
+        sql: ${device_type_raw} = 'Smartphone' ;;
+        label: "Mobile"
+      }
+      when: {
+        sql: ${device_type_raw} = 'Tablet' ;;
+        label: "Tablet"
+      }
+      else: "Other"
+    }
+  }
+
+  dimension: network_raw {
+    type: string
+    sql: ${TABLE}.network ;;
   }
 
   dimension: network {
+    hidden: yes
     type: string
+    case: {
+      when: {
+        sql: ${network_raw} = 'Syndicated search partners' ;;
+        label: "Search Partners"
+      }
+      when: {
+        sql: ${network_raw} = 'Bing and Yahoo! search' ;;
+        label: "Bing and Yahoo!"
+      }
+      when: {
+        sql: ${network_raw} = 'AOL search' ;;
+        label: "AOL"
+      }
+      else: "Other"
+    }
   }
 
   dimension: top_vs_other {
