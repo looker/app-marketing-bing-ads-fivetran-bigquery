@@ -123,6 +123,11 @@ view: bing_ad_impressions_adapter_base {
     type: number
   }
 
+  dimension: account_id_string {
+    hidden: yes
+    sql: CAST(${TABLE}.account_id as STRING) ;;
+  }
+
   dimension: account_name {
     type: string
   }
