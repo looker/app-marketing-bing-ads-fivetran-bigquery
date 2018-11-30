@@ -11,7 +11,7 @@ explore: bing_ad_impressions_adapter {
 
 view: bing_ad_impressions_adapter {
   extends: [bing_ad_impressions_adapter_base]
-  sql_table_name: {{ fact.bing_ads_schema._sql }}.account_stats ;;
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.account_performace_daily_report ;;
 }
 
 view: bing_ad_metrics_base_dimensions {
@@ -92,7 +92,37 @@ view: bing_ad_metrics_base_dimensions {
   }
 }
 
-view: bing_ad_impressions_adapter_base {
+view: bing_account_history_base {
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.account_history ;;
+
+  dimension: id {
+    type: string
+    primary_key: yes
+    hidden: yes
+  }
+
+  dimension_group: modified {
+    type: time
+    sql: ${TABLE}.modified_time ;;
+  }
+
+  dimension: account_name {
+    type: string
+    sql: ${TABLE}.name ;;
+  }
+
+  dimension: account_number {
+    type: string
+    sql: ${TABLE}.number ;;
+  }
+
+  dimension: account_status {
+    type: string
+    sql: ${TABLE}.financial_status ;;
+  }
+}
+
+view: bing_account_impressions_adapter_base {
   extension: required
   extends: [bing_ads_config, bing_ads_base, bing_ad_metrics_base_dimensions]
 
@@ -124,18 +154,6 @@ view: bing_ad_impressions_adapter_base {
   dimension: account_id_string {
     hidden: yes
     sql: CAST(${TABLE}.account_id as STRING) ;;
-  }
-
-  dimension: account_name {
-    type: string
-  }
-
-  dimension: account_number {
-    type: string
-  }
-
-  dimension: account_status {
-    type: string
   }
 
   dimension: ad_distribution {
@@ -220,9 +238,52 @@ explore: bing_ad_impressions_campaign_adapter {
   view_label: "Impressions by Campaign"
 }
 
+view: bing_campaign_history_base {
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.campaign_history ;;
+
+  dimension: account_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: id {
+    type: string
+    primary_key: yes
+    hidden: yes
+  }
+
+  dimension_group: modified {
+    type: time
+    sql: ${TABLE}.modified_time ;;
+  }
+
+  dimension: budget_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: campaign_name {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.name ;;
+  }
+
+  dimension: campaign_status {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.status ;;
+  }
+
+  dimension: type {
+    type: string
+    hidden: yes
+  }
+}
+
+
 view: bing_ad_impressions_campaign_adapter {
   extends: [bing_ad_impressions_campaign_adapter_base]
-  sql_table_name: {{ fact.bing_ads_schema._sql }}.campaign_stats ;;
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.campaign_performace_daily_report ;;
 }
 
 view: bing_ad_impressions_campaign_adapter_base {
@@ -248,13 +309,7 @@ view: bing_ad_impressions_campaign_adapter_base {
     hidden: yes
     sql: CAST(${TABLE}.campaign_id as STRING) ;;
   }
-
-  dimension: campaign_name {
-    type: string
-  }
 }
-
-
 
 explore: bing_ad_impressions_ad_group_adapter {
   extends: [bing_ad_impressions_campaign_adapter]
@@ -265,10 +320,42 @@ explore: bing_ad_impressions_ad_group_adapter {
   view_label: "Impressions by Ad Group"
 }
 
+view: bing_ad_group_history_base {
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_group_history ;;
+
+  dimension: campaign_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: id {
+    type: string
+    primary_key: yes
+    hidden: yes
+  }
+
+  dimension_group: modified {
+    type: time
+    sql: ${TABLE}.modified_time ;;
+  }
+
+  dimension: ad_group_name {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.name ;;
+  }
+
+  dimension: ad_group_status {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.status ;;
+  }
+}
+
 view: bing_ad_impressions_ad_group_adapter {
 #   extension: required
   extends: [bing_ad_impressions_campaign_adapter_base]
-  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_group_stats ;;
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_group_performace_daily_report ;;
 
   dimension: ad_group_primary_key {
     hidden: yes
@@ -291,25 +378,14 @@ view: bing_ad_impressions_ad_group_adapter {
     sql: CAST(${TABLE}.ad_group_id as STRING) ;;
   }
 
-  dimension: ad_group_name {
-    type: string
-  }
-
   dimension: ad_relevance {
     type: number
-  }
-
-  dimension: campaign_status {
-    type: string
   }
 
   dimension: landing_page_experience {
     type: number
   }
 }
-
-
-
 
 explore: bing_ad_impressions_keyword_adapter {
   extends: [bing_ad_impressions_ad_group_adapter]
@@ -320,9 +396,54 @@ explore: bing_ad_impressions_keyword_adapter {
   view_label: "Impressions by Keyword"
 }
 
+view: bing_keyword_history_base {
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.keyword_history ;;
+
+  dimension: ad_group_id {
+    type: string
+    hidden: yes
+  }
+
+  dimension: id {
+    type: string
+    primary_key: yes
+    hidden: yes
+  }
+
+  dimension_group: modified {
+    type: time
+    sql: ${TABLE}.modified_time ;;
+  }
+
+  dimension: keyword {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.name ;;
+  }
+
+  dimension: keyword_status {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.status ;;
+  }
+
+  dimension: bid_strategy_type {
+    type: string
+  }
+
+  dimension: destination_url {
+    type: string
+  }
+
+  dimension: final_url {
+    type: string
+  }
+
+}
+
 view: bing_ad_impressions_keyword_adapter {
   extends: [bing_ad_impressions_ad_group_adapter]
-  sql_table_name: {{ fact.bing_ads_schema._sql }}.keyword_stats ;;
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.keyword_performace_daily_report ;;
 
   dimension: keyword_primary_key {
     hidden: yes
@@ -335,10 +456,6 @@ view: bing_ad_impressions_keyword_adapter {
     sql: ${keyword_primary_key} ;;
   }
 
-  dimension: ad_group_status {
-    type: string
-  }
-
   dimension: ad_id {
     hidden: yes
     type: number
@@ -349,14 +466,6 @@ view: bing_ad_impressions_keyword_adapter {
     sql: CAST(${TABLE}.ad_id as STRING) ;;
   }
 
-  dimension: ad_type {
-    type: string
-  }
-
-  dimension: bid_strategy_type {
-    type: string
-  }
-
   dimension: currency_code {
     type: string
   }
@@ -365,20 +474,8 @@ view: bing_ad_impressions_keyword_adapter {
     type: number
   }
 
-  dimension: destination_url {
-    type: string
-  }
-
   dimension: expected_ctr {
     type: number
-  }
-
-  dimension: final_url {
-    type: string
-  }
-
-  dimension: keyword {
-    type: string
   }
 
   dimension: keyword_id {
@@ -389,10 +486,6 @@ view: bing_ad_impressions_keyword_adapter {
   dimension: keyword_id_string {
     hidden: yes
     sql: CAST(${TABLE}.keyword_id as STRING) ;;
-  }
-
-  dimension: keyword_status {
-    type: string
   }
 
   dimension: language {
@@ -415,38 +508,57 @@ explore: bing_ad_impressions_ad_adapter {
   group_label: "Bing Ads"
   label: "Bing Ads Impressions by Ad"
   view_label: "Impressions by Ad"
-
 }
 
-view: bing_ad_impressions_ad_adapter {
-  extends: [bing_ad_impressions_keyword_adapter]
-  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_stats ;;
+view: bing_ad_history_base {
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_history ;;
 
-  dimension: ad_primary_key {
+  dimension: ad_group_id {
+    type: string
     hidden: yes
-    sql: concat(${keyword_primary_key}, "|", ${ad_id_string}) ;;
   }
 
-  dimension: primary_key {
+  dimension: id {
+    type: string
     primary_key: yes
     hidden: yes
-    sql: ${ad_primary_key} ;;
   }
 
-  dimension: ad_description {
+  dimension_group: modified {
+    type: time
+    sql: ${TABLE}.modified_time ;;
+  }
+
+  dimension: name {
+    type: string
+    hidden: yes
+  }
+
+  dimension: status {
+    type: string
+    hidden: yes
+  }
+
+  dimension: type {
+    type: string
+    hidden: yes
+  }
+
+  dimension: title {
+    type: string
+  }
+
+  dimension: title_part_1 {
+    type: string
+  }
+
+  dimension: title_part_2 {
     type: string
   }
 
   dimension: ad_status {
     type: string
-  }
-
-  dimension: ad_title {
-    type: string
-  }
-
-  dimension: display_url {
-    type: string
+    sql: ${TABLE}.status ;;
   }
 
   dimension: path_1 {
@@ -457,12 +569,34 @@ view: bing_ad_impressions_ad_adapter {
     type: string
   }
 
-  dimension: title_part_1 {
+  dimension: display_url {
     type: string
   }
+}
 
-  dimension: title_part_2 {
-    type: string
+view: bing_ad_impressions_ad_adapter {
+  extends: [bing_ad_impressions_keyword_adapter]
+  sql_table_name: {{ fact.bing_ads_schema._sql }}.ad_performace_daily_report ;;
+
+  dimension: ad_primary_key {
+    hidden: yes
+    sql: concat(${ad_group_primary_key}, "|", ${ad_id_string}) ;;
+  }
+
+  dimension: ad_id {
+    hidden: yes
+    type: number
+  }
+
+  dimension: ad_id_string {
+    hidden: yes
+    sql: CAST(${TABLE}.ad_id as STRING) ;;
+  }
+
+  dimension: primary_key {
+    primary_key: yes
+    hidden: yes
+    sql: ${ad_primary_key} ;;
   }
 
 }
