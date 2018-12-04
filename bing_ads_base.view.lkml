@@ -17,12 +17,12 @@ view: bing_ads_base {
   dimension: _date {
     hidden: yes
     type: date_raw
-    sql: CAST(${TABLE}.gregorian_date AS DATE) ;;
+    sql: CAST(${TABLE}.date AS DATE) ;;
   }
 
   dimension: date_string {
     hidden: yes
-    sql: CAST(${TABLE}.gregorian_date AS STRING) ;;
+    sql: CAST(${TABLE}.date AS STRING) ;;
   }
 
   dimension: latest {
