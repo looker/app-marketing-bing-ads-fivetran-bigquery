@@ -84,7 +84,7 @@ view: bing_ad_metrics_base_dimensions {
 
   dimension: revenue {
     type: number
-    sql: ${TABLE}.revenue ;;
+    sql: CAST(${TABLE}.revenue as numeric) ;;
   }
 
   dimension: spend {
